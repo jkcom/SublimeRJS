@@ -1,0 +1,7 @@
+[{
+	"caption": "Add SublimeRJS",
+	"command": "add_sublime_rjs",
+	"args": {
+		"dirs": []
+	}
+}]
