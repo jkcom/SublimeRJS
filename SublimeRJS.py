@@ -78,32 +78,53 @@ class AppListener(sublime_plugin.EventListener):
 
 
 # select module
-def selectModule(onSelectCallback):
+def selectModule(onSelectCallback, group):
 	global shadowList
 	global context
 	shadowList = []
 	list = []
 
-	for module in context.getModules():
+	for module in group:
 		list.append([module.name, module.package])
 	context.window.show_quick_panel(list, onSelectCallback, 0)
 
 
-def onModuleSelectAdd(selectionIndex):
+def addModule(module):
+	if module is None:
+		return
 	global context
-	edit = editor.ModuleEdit(context.window.active_view().substr(sublime.Region(0, context.window.active_view().size())))
-	
+	addEdit = editor.ModuleEdit(context.window.active_view().substr(sublime.Region(0, context.window.active_view().size())))
+	# get define region
+	defineRegion = addEdit.getDefineRegion()
+	addEdit.addModule(module)
+	addEdit.render()
+	edit = context.window.active_view().begin_edit()
+	context.window.active_view().replace(edit, defineRegion, addEdit.render())
+	context.window.active_view().end_edit(edit)
+
+
+def onScriptSelectAdd(selectionIndex):
+	global context
+	addModule(context.getScriptModules()[selectionIndex])
+
+
+def onTextSelectAdd(selectionIndex):
+	global context
+	addModule(context.getTextModules()[selectionIndex])
 
 
 # main callback
 def onMainActionSelected(selectionIndex):
+	global context
 	if (selectionIndex == 0):
-		selectModule(onModuleSelectAdd)
+		selectModule(onScriptSelectAdd, context.getScriptModules())
+	elif (selectionIndex == 1):
+		selectModule(onTextSelectAdd, context.getTextModules())
 
 
 class SublimeRjsCommand(sublime_plugin.WindowCommand):
     def run(self):
-    	self.window.show_quick_panel(["Add module", "Create module", "Remove module"], onMainActionSelected, 0)
+    	self.window.show_quick_panel(["Add script module", "Add text module", "Create module", "Remove module"], onMainActionSelected, 0)
 
 
 # startup

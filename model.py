@@ -5,7 +5,8 @@ class Context:
 	window = None
 	settingsPath = ""
 	basedir = ""
-	modules = None
+	scriptModules = None
+	textModules = None
 
 	def __init__(self, window, settingsPath):
 		self.window = window
@@ -30,13 +31,20 @@ class Context:
 		return self.settingsPath is not ""
 
 	def resetModules(self):
-		self.modules = []
+		self.scriptModules = []
+		self.textModules = []
 
-	def addModule(self, module):
-		self.modules.append(module)
+	def addScriptModule(self, module):
+		self.scriptModules.append(module)
 
-	def getModules(self):
-		return self.modules
+	def getScriptModules(self):
+		return self.scriptModules
+
+	def addTextModule(self, module):
+		self.textModules.append(module)
+
+	def getTextModules(self):
+		return self.textModules
 
 
 # module
@@ -58,3 +66,12 @@ class Module:
 
 	def package(self):
 		return self.package
+
+	def getImportString(self):
+		if self.type == "script":
+			return self.package + self.name.split(self.ext)[0]
+		elif self.type == "text":
+			return "text!" + self.package + self.name
+
+	def getRefrenceString(self):
+		return self.name.split(self.ext)[0]
