@@ -1,5 +1,4 @@
-    [  
-        {  
-            "keys": ["super+shift+m"], "command": "sublime_rjs"  
-        }  
-    ]  
+    [{
+    	"keys": ["super+m"],
+    	"command": "sublime_rjs"
+    }]

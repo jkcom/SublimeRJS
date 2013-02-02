@@ -1,5 +1,4 @@
 {
 	"script_folders": ["js"],
-	"test":"test",
 	"text_folders":["templates"]
 }

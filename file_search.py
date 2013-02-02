@@ -15,7 +15,6 @@ def checkQue():
 	global timer
 	global que
 	global foundCallback
-	print "chekc qye"
 	if que.empty():
 		foundCallback(None)
 	else:

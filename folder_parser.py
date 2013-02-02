@@ -1,8 +1,5 @@
 import threading
 import os
-import ntpath
-import sublime_plugin
-
 
 global _collector_thread
 _collector_thread = None
