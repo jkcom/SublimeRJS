@@ -1,13 +1,11 @@
 import sublime
 import sublime_plugin
 
-import json
-from pprint import pprint
-
 import model
 import file_search
 import module_parser
 import editor
+import context_helper
 
 global context
 context = None
@@ -48,17 +46,13 @@ def setContext(newContext):
 	context = newContext
 
 	# hack to get back to main thread
-	sublime.set_timeout(loadSettings, 1)
+	sublime.set_timeout(initContext, 1)
 
 
 # load settings
-def loadSettings():
+def initContext():
 	global context
-	json_data = open(context.settingsPath)
-	data = json.load(json_data)
-	pprint(data)
-	json_data.close()
-	context.setSettings(data)
+	context_helper.initializeContext(context)
 	module_parser.parseModules(context)
 
 

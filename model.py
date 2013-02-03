@@ -55,6 +55,12 @@ class Context:
 	def getTextModules(self):
 		return self.textModules
 
+	def setModuleAliasMap(self, moduleAliasMap):
+		self.moduleAliasMap = moduleAliasMap
+
+	def getModuleAliasMap(self):
+		return self.moduleAliasMap
+
 
 # module
 class Module:
@@ -62,6 +68,8 @@ class Module:
 	path = ""
 	type = ""
 	package = ""
+	importAlias = ""
+	refrenceAlias = ""
 
 	def __init__(self, name, path, ext, type, package):
 		self.name = name
@@ -77,10 +85,27 @@ class Module:
 		return self.package
 
 	def getImportString(self):
+		if self.importAlias is not "":
+			return self.importAlias
 		if self.type == "script":
 			return self.package + self.name.split(self.ext)[0]
 		elif self.type == "text":
 			return "text!" + self.package + self.name
 
 	def getRefrenceString(self):
+		if self.importAlias is not "":
+			if self.refrenceAlias is not "":
+				return self.refrenceAlias
+			return self.importAlias
+
+		if self.refrenceAlias is not "":
+			return self.refrenceAlias
+		
 		return self.name.split(self.ext)[0]
+
+	def setImportAlias(self, alias):
+		self.importAlias = alias
+
+	def setRefrenceAlias(self, alias):
+		self.refrenceAlias = alias
+
