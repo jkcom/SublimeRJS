@@ -18,6 +18,8 @@ contextWindow = None
 global shadowList
 shadowList = None
 
+global currentModuleEdit
+
 
 # update contexts
 def getContext(window):
@@ -86,6 +88,7 @@ def selectModule(onSelectCallback, group):
 
 	for module in group:
 		list.append([module.name, module.package])
+		shadowList.append(module)
 	context.window.show_quick_panel(list, onSelectCallback, 0)
 
 
@@ -93,24 +96,46 @@ def addModule(module):
 	if module is None:
 		return
 	global context
-	addEdit = editor.ModuleEdit(context.window.active_view().substr(sublime.Region(0, context.window.active_view().size())))
+	addEdit = editor.ModuleEdit(context.window.active_view().substr(sublime.Region(0, context.window.active_view().size())), context)
 	# get define region
 	defineRegion = addEdit.getDefineRegion()
 	addEdit.addModule(module)
-	addEdit.render()
 	edit = context.window.active_view().begin_edit()
 	context.window.active_view().replace(edit, defineRegion, addEdit.render())
 	context.window.active_view().end_edit(edit)
 
 
 def onScriptSelectAdd(selectionIndex):
-	global context
-	addModule(context.getScriptModules()[selectionIndex])
+	if selectionIndex == -1:
+		return
+	global shadowList
+	addModule(shadowList[selectionIndex])
 
 
 def onTextSelectAdd(selectionIndex):
+	if selectionIndex == -1:
+		return
+	global shadowList
+	addModule(shadowList[selectionIndex])
+
+# remove module
+def removeModule():
 	global context
-	addModule(context.getTextModules()[selectionIndex])
+	global currentModuleEdit
+	currentModuleEdit = editor.ModuleEdit(context.window.active_view().substr(sublime.Region(0, context.window.active_view().size())), context)
+	modules = currentModuleEdit.getModules()
+	selectModule(onModuleSelectRemove, modules)
+
+def onModuleSelectRemove(selectionIndex):
+	if selectionIndex == -1:
+		return
+	global shadowList
+	global currentModuleEdit
+	global context
+	currentModuleEdit.removeModule(shadowList[selectionIndex])
+	edit = context.window.active_view().begin_edit()
+	context.window.active_view().replace(edit, currentModuleEdit.getDefineRegion(), currentModuleEdit.render())
+	context.window.active_view().end_edit(edit)
 
 
 # main callback
@@ -120,6 +145,8 @@ def onMainActionSelected(selectionIndex):
 		selectModule(onScriptSelectAdd, context.getScriptModules())
 	elif (selectionIndex == 1):
 		selectModule(onTextSelectAdd, context.getTextModules())
+	elif selectionIndex == 3:
+		removeModule()
 
 
 class SublimeRjsCommand(sublime_plugin.WindowCommand):

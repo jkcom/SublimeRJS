@@ -7,6 +7,7 @@ class Context:
 	basedir = ""
 	scriptModules = None
 	textModules = None
+	modulesByImportString = {}
 
 	def __init__(self, window, settingsPath):
 		self.window = window
@@ -36,12 +37,20 @@ class Context:
 
 	def addScriptModule(self, module):
 		self.scriptModules.append(module)
+		self.modulesByImportString[module.getImportString()] = module
+
+	def getModuleByImportString(self, importString):
+		if importString in self.modulesByImportString:
+			return self.modulesByImportString[importString]
+		else:
+			return None
 
 	def getScriptModules(self):
 		return self.scriptModules
 
 	def addTextModule(self, module):
 		self.textModules.append(module)
+		self.modulesByImportString[module.getImportString()] = module
 
 	def getTextModules(self):
 		return self.textModules
