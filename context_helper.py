@@ -5,7 +5,6 @@ def initializeContext(context):
 	# load settings
 	json_data = open(context.settingsPath)
 	data = json.load(json_data)
-	pprint(data)
 	json_data.close()
 	context.setSettings(data)
 	# load require main

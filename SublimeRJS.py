@@ -7,6 +7,9 @@ import module_parser
 import editor
 import context_helper
 import factory
+import json
+import shutil
+import pprint
 
 global context
 context = None
@@ -28,8 +31,9 @@ def getContext(window):
 	contextWindow = window
 
 	# find sublime settings file in new active window
-	for folder in window.folders():
-		file_search.findFile(folder, "SublimeRJS.sublime-settings", onSearchedForSettings)
+	if window is not None:
+		for folder in window.folders():
+			file_search.findFile(folder, "SublimeRJS.sublime-settings", onSearchedForSettings)
 
 
 # on searched for contexs.get("script_folders")
@@ -37,7 +41,7 @@ def onSearchedForSettings(file):
 	if file is not None:
 		setContext(model.Context(contextWindow, file))
 	else:
-		print "No SublimeRJS Context"
+		pass
 
 
 # set context
@@ -60,17 +64,21 @@ def initContext():
 class AppListener(sublime_plugin.EventListener):
 
 	def on_post_save(self, view):
+		global context
+		if context is not None:
+			if sublime.active_window().active_view().file_name() == context.settingsPath:
+				getContext(sublime.active_window())
 		pass
 
 	def on_activated(self, view):
 		if context is not None:
-			if view.window() is not None:
- 				if view.window().id() != context.window.id():
-					getContext(view.window())
+			if sublime.active_window() is not None:
+ 				if sublime.active_window().id() != context.window.id():
+					getContext(sublime.active_window())
 			else:
-				getContext(view.window)
+				getContext(sublime.active_window())
 		else:
-			getContext(view.window())
+			getContext(sublime.active_window())
 
 
 # select module
@@ -147,7 +155,6 @@ def createModule(importOnCreated, type):
 
 def onModuleCreated():
 	module_parser.parseModules(context)
-	print "created"
 
 
 # main callback
@@ -183,6 +190,14 @@ class SublimeRjsCommand(sublime_plugin.WindowCommand):
 
     	self.window.show_quick_panel(["Import SCRIPT module", "Import TEXT module", "Remove module", "Create SCRIPT module", "Create TEXT module", createAndImportScript, createAndImportText], onMainActionSelected, 0)
 
+
+class AddSublimeRjsCommand(sublime_plugin.ApplicationCommand):
+	def run(self, dirs):
+		srcFile = sublime.packages_path() + "/SublimeRJS/SublimeRJS Project.sublime-settings"
+		destFile = dirs[0] + "/SublimeRJS.sublime-settings"
+		shutil.copyfile(srcFile, destFile)
+		sublime.active_window().open_file(destFile)
+		getContext(sublime.active_window())		
 
 # startup
 getContext(sublime.active_window())

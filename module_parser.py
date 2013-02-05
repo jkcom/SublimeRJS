@@ -6,7 +6,6 @@ import model
 
 
 def parseModules(context):
-	print "go with " + context.getBaseDir()
 	# clean context
 	context.resetModules()
 	# scripts

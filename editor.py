@@ -10,7 +10,6 @@ class ModuleEdit:
 		defineString = content[defineRegion.begin():defineRegion.end()]
 		#parse modules
 		modulesStart = defineString.find("[")
-		print "ms", modulesStart
 		if modulesStart > -1:
 			modulesEnd = defineString.find("]")
 			modulesTemp = defineString[(modulesStart + 1):(modulesEnd)]
