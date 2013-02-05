@@ -6,6 +6,7 @@ import file_search
 import module_parser
 import editor
 import context_helper
+import factory
 
 global context
 context = None
@@ -17,7 +18,6 @@ global shadowList
 shadowList = None
 
 global currentModuleEdit
-
 
 # update contexts
 def getContext(window):
@@ -131,6 +131,24 @@ def onModuleSelectRemove(selectionIndex):
 	context.window.active_view().replace(edit, currentModuleEdit.getDefineRegion(), currentModuleEdit.render())
 	context.window.active_view().end_edit(edit)
 
+def createModule(importOnCreated, type):
+	global context
+	region = context.window.active_view().sel()[0]
+	moduleName = ""
+	if region.begin() != region.end():
+		moduleName = context.window.active_view().substr(region)
+	createConfig = {
+		"type": type,
+		"callback": onModuleCreated,
+		"name": moduleName
+	}
+
+	factory.createModule(context, createConfig)
+
+def onModuleCreated():
+	module_parser.parseModules(context)
+	print "created"
+
 
 # main callback
 def onMainActionSelected(selectionIndex):
@@ -139,13 +157,31 @@ def onMainActionSelected(selectionIndex):
 		selectModule(onScriptSelectAdd, context.getScriptModules())
 	elif (selectionIndex == 1):
 		selectModule(onTextSelectAdd, context.getTextModules())
-	elif selectionIndex == 3:
+	elif selectionIndex == 2:
 		removeModule()
+	elif selectionIndex == 3:
+		createModule(False, "script")
+	elif selectionIndex == 4:
+		createModule(False, "text")
+	elif selectionIndex == 5:
+		createModule(True, "script")
+	elif selectionIndex == 6:
+		createModule(True, "text")
+	
 
 
 class SublimeRjsCommand(sublime_plugin.WindowCommand):
     def run(self):
-    	self.window.show_quick_panel(["Add script module", "Add text module", "Create module", "Remove module"], onMainActionSelected, 0)
+    	global context
+    	# get selection
+    	createAndImportScript = "Create and import SCRIPT module"
+    	createAndImportText = "Create and import TEXT module"
+    	region = context.window.active_view().sel()[0]
+    	if region.begin() != region.end():
+    		createAndImportScript += " '" +context.window.active_view().substr(region)+"'"
+    		createAndImportText += " '" +context.window.active_view().substr(region)+"'"
+
+    	self.window.show_quick_panel(["Import SCRIPT module", "Import TEXT module", "Remove module", "Create SCRIPT module", "Create TEXT module", createAndImportScript, createAndImportText], onMainActionSelected, 0)
 
 
 # startup

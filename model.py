@@ -34,10 +34,14 @@ class Context:
 	def resetModules(self):
 		self.scriptModules = []
 		self.textModules = []
+		self.scriptPackages = []
+		self.textPackages = []
 
 	def addScriptModule(self, module):
 		self.scriptModules.append(module)
 		self.modulesByImportString[module.getImportString()] = module
+		if module.package not in self.scriptPackages:
+			self.scriptPackages.append(module.package)
 
 	def getModuleByImportString(self, importString):
 		if importString in self.modulesByImportString:
@@ -51,6 +55,8 @@ class Context:
 	def addTextModule(self, module):
 		self.textModules.append(module)
 		self.modulesByImportString[module.getImportString()] = module
+		if module.package not in self.textPackages:
+			self.textPackages.append(module.package)
 
 	def getTextModules(self):
 		return self.textModules
@@ -60,6 +66,12 @@ class Context:
 
 	def getModuleAliasMap(self):
 		return self.moduleAliasMap
+
+	def getTextPackages(self):
+		return self.textPackages
+
+	def getScriptPackages(self):
+		return self.scriptPackages
 
 
 # module
