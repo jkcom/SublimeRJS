@@ -74,7 +74,14 @@ Modules that will be automatically added when creating a new module.
     "text_group":"1"
 Sets in which column the module type should be opened.
 ## Install
+Download, unzip and move to the `Packages` folder of Sublime Text 2.
 ## Features to come
+* Move / Refactor modules
+* Method code hints across modules
+
 ## Disclaimer
+SublimeRJS is currently at an early stage. It is not recommended to use this for production purpose. All use is at own risk.
+
+Should you choose to look at the source code I should probably advise you that this was my first Python project, and the code will look pretty messy to the experienced Python developer.
 
 
