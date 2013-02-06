@@ -12,6 +12,12 @@ SublimeRJS supports script as well as text modules.
 Please see the following screencast for a quick feature demonstration.
 http://www.youtube.com/watch?v=HlNTheck1Hk
 ## Shortcuts
+* <b>Menu</b>  
+  Press `cmd + m` / `ctrl + m` to open the main menu. This will give you all the options in the quick panel. 
+* <b>Open module</b>  
+  Press `Cmd+Shift+[7-9])` / `Ctrl+Shift+[7-9]` to open a module in specific column view.
+
+
 ## Configuration
 ## Install
 ## Features to come
