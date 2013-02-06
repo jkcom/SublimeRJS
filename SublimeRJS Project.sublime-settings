@@ -10,5 +10,7 @@
 		"jquery",
 		"underscore",
 		"backbone"
-	]
+	],
+	"scriptGroup":"1",
+	"textGroup":"2"
 }

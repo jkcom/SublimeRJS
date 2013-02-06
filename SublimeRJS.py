@@ -174,7 +174,45 @@ def onMainActionSelected(selectionIndex):
 		createModule(True, "script")
 	elif selectionIndex == 6:
 		createModule(True, "text")
-	
+
+
+def onScriptSelectOpen(selectionIndex):
+	global shadowList
+	print shadowList[selectionIndex].path
+	sublime.active_window().open_file(shadowList[selectionIndex].getFullPath())
+	pass
+
+
+def onTextSelectOpen(selectionIndex):
+	global shadowList
+	sublime.active_window().open_file(shadowList[selectionIndex].getFullPath())
+	pass
+
+
+def openModule(index):
+	global context
+	if context.settings["script_group"] == str(index):
+		selectModule(onScriptSelectOpen, context.getScriptModules())
+	elif context.settings["text_group"] == str(index):
+		selectModule(onTextSelectOpen, context.getTextModules())
+
+
+class SublimeRjsOpen1Command(sublime_plugin.WindowCommand):
+	def run(slef):
+		sublime.active_window().focus_group(0)
+		openModule(0)
+
+
+class SublimeRjsOpen2Command(sublime_plugin.WindowCommand):
+	def run(slef):
+		sublime.active_window().focus_group(1)
+		openModule(1)
+
+
+class SublimeRjsOpen3Command(sublime_plugin.WindowCommand):
+	def run(slef):
+		sublime.active_window().focus_group(2)
+		openModule(2)
 
 
 class SublimeRjsCommand(sublime_plugin.WindowCommand):

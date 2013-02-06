@@ -121,3 +121,6 @@ class Module:
 	def setRefrenceAlias(self, alias):
 		self.refrenceAlias = alias
 
+	def getFullPath(self):
+		return self.path +"/"+ self.name
+
