@@ -11,7 +11,10 @@ SublimeRJS supports script as well as text modules.
 ## Demonstration
 Please see the following screencast for a quick feature demonstration.
 http://www.youtube.com/watch?v=HlNTheck1Hk
-## Shortcuts
+## Usage
+* <b>Add to project</b>  
+  Right click your project folder and click `Add SublimeRJS`. This will add the configuration file to your project.  
+  Edit the configuration acording to your project. Save.
 * <b>Menu</b>  
   Press `cmd + m` / `ctrl + m` to open the main menu. This will give you all the options in the quick panel. 
 * <b>Open module</b>  
@@ -19,6 +22,57 @@ http://www.youtube.com/watch?v=HlNTheck1Hk
 
 
 ## Configuration
+### Example configuration
+    {
+      "script_folders": [
+        "js",
+        "libs"
+      ],
+      "text_folders":[
+        "templates"
+      ],
+      "require_main":"js/main.js",
+      "aliases": {
+        "jquery":"$",
+        "underscore":"_"
+      },
+      "auto_add":[
+        "jquery",
+        "underscore",
+        "event/eventBus"
+      ],
+      "script_group":"0",
+      "text_group":"1"
+    }
+### Config elements
+    "script_folders": [
+      "js",
+      "test"
+    ],
+    "text_folders":[
+      "templates"
+    ]
+Defines the folders that should be indexed. Relative to the config file.
+    
+    "require_main":"js/main.js"
+Refrence to the RequireJS main file. Relative to the config file.
+
+    "aliases": {
+      "jquery":"$",
+      "underscore":"_"
+    }
+Aliases to apply when adding modules to the `define()` statment.
+
+    "auto_add":[
+      "jquery",
+      "underscore",
+      "event/eventBus"
+    ]
+Modules that will be automatically added when creating a new module.
+
+    "script_group":"0",
+    "text_group":"1"
+Sets in which column the module type should be opened.
 ## Install
 ## Features to come
 ## Disclaimer
