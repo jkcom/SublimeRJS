@@ -45,6 +45,7 @@ http://www.youtube.com/watch?v=HlNTheck1Hk
       "text_group":"1"
     }
 ### Config elements
+#### Source folders
     "script_folders": [
       "js",
       "test"
@@ -53,23 +54,23 @@ http://www.youtube.com/watch?v=HlNTheck1Hk
       "templates"
     ]
 Defines the folders that should be indexed. Relative to the config file.
-    
+#### RequireJS main     
     "require_main":"js/main.js"
 Refrence to the RequireJS main file. Relative to the config file.
-
+#### Aliases
     "aliases": {
       "jquery":"$",
       "underscore":"_"
     }
 Aliases to apply when adding modules to the `define()` statment.
-
+#### Auto add modules
     "auto_add":[
       "jquery",
       "underscore",
       "event/eventBus"
     ]
 Modules that will be automatically added when creating a new module.
-
+#### Columns
     "script_group":"0",
     "text_group":"1"
 Sets in which column the module type should be opened.
