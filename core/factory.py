@@ -63,17 +63,14 @@ def onNameDone(inputString):
 	else:
 		ext = name[name.rfind("."):]
 
-	print name, ext
-
 	moduleDir = moduleFile[0:moduleFile.rfind("/")]
 	moduleFile = moduleDir + name
 	if os.path.exists(moduleDir) == False:
 		os.makedirs(moduleDir)
 
 	fileContent = "define(function(){});"
-	if len(context.settings["autoadd"]) > 0:
-		for module in context.settings["autoadd"]:
-			print "add module ", module
+	if len(context.settings["auto_add"]) > 0:
+		for module in context.settings["auto_add"]:
 			addEdit = editor.ModuleEdit(fileContent, context)
 			addEdit.addModule(context.getModuleByImportString(module))
 			fileContent = addEdit.render()+ "{});";

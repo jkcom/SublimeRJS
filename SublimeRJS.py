@@ -1,3 +1,6 @@
+import sys
+sys.path.append("core")
+
 import sublime
 import sublime_plugin
 
@@ -10,6 +13,7 @@ import factory
 import json
 import shutil
 import pprint
+
 
 global context
 context = None
