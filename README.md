@@ -43,6 +43,7 @@ http://www.youtube.com/watch?v=HlNTheck1Hk
       ],
       "script_group":"0",
       "text_group":"1"
+      "module_snippet_folder":"moduleSnippets"
     }
 ### Config elements
 #### Source folders
@@ -74,6 +75,9 @@ Modules that will be automatically added when creating a new module.
     "script_group":"0",
     "text_group":"1"
 Sets in which column the module type should be opened.
+#### Module snippets
+    "module_snippet_folder":"moduleSnippets"
+Specify folder for your module snippets.
 ## Install
 Download, unzip and move to the `Packages` folder of Sublime Text 2.
 ## Features to come
