@@ -78,6 +78,7 @@ Download, unzip and move to the `Packages` folder of Sublime Text 2.
 ## Features to come
 * Move / Refactor modules
 * Method code hints across modules
+* Jump to module definition
 
 ## Disclaimer
 SublimeRJS is currently at an early stage. It is not recommended to use this for production purpose. All use is at own risk.
