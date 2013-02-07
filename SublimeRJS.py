@@ -1,10 +1,12 @@
 import sys
-sys.path.append("core")
+sys.path.append( "core")
+
+import model
 
 import sublime
 import sublime_plugin
 
-import model
+
 import file_search
 import module_parser
 import editor
@@ -23,6 +25,9 @@ contextWindow = None
 
 global shadowList
 shadowList = None
+
+global moduleAddInLine
+moduleAddInLine = None
 
 global currentModuleEdit
 
@@ -61,7 +66,20 @@ def setContext(newContext):
 def initContext():
 	global context
 	context_helper.initializeContext(context)
-	module_parser.parseModules(context)
+	module_parser.parseModules(context, onModulePareDone)
+
+def onModulePareDone(): 
+	sublime.set_timeout(checkModulesAddInLine, 1)
+
+
+def checkModulesAddInLine():
+	global moduleAddInLine
+	module = context.getModuleByImportString(moduleAddInLine)
+	if module is not None:
+		addModule(context.getModuleByImportString(moduleAddInLine))
+		moduleAddInLine = None
+	pass
+
 
 
 # application listner
@@ -102,6 +120,7 @@ def addModule(module):
 	if module is None:
 		return
 	global context
+	print "do add", module
 	addEdit = editor.ModuleEdit(context.window.active_view().substr(sublime.Region(0, context.window.active_view().size())), context)
 	# get define region
 	defineRegion = addEdit.getDefineRegion()
@@ -152,13 +171,18 @@ def createModule(importOnCreated, type):
 	createConfig = {
 		"type": type,
 		"callback": onModuleCreated,
-		"name": moduleName
+		"name": moduleName,
+		"importOnCreated":importOnCreated
 	}
 
 	factory.createModule(context, createConfig)
 
-def onModuleCreated():
-	module_parser.parseModules(context)
+def onModuleCreated(importString, createConfig):
+	global moduleAddInLine
+	module_parser.parseModules(context, onModulePareDone)
+	if createConfig["importOnCreated"] == True:
+		moduleAddInLine = importString
+		pass
 
 
 # main callback

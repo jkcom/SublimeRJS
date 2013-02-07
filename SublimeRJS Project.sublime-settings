@@ -1,16 +1,9 @@
 {
-	"script_folders": ["js", "test"],
-	"text_folders":["templates"],
-	"require_main":"js/main.js",
-	"aliases": {
-		"jquery":"$",
-		"underscore":"_"
-	},
-	"autoadd":[
-		"jquery",
-		"underscore",
-		"backbone"
-	],
+	"script_folders": [],
+	"text_folders":[],
+	"require_main":"",
+	"aliases": {},
+	"autoadd":[],
 	"scriptGroup":"1",
 	"textGroup":"2"
 }

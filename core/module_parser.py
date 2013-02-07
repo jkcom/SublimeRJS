@@ -4,8 +4,12 @@ import parsing
 import ntpath
 import model
 
+global onParseDoneCallback
 
-def parseModules(context):
+
+def parseModules(context, callback):
+	global onParseDoneCallback
+	onParseDoneCallback = callback
 	# clean context
 	context.resetModules()
 	# scripts
@@ -63,15 +67,20 @@ class ParsingThread(threading.Thread):
 		threading.Thread.__init__(self)
 
 	def parseFolder(self, folder, context, parseConfig):
+		
 		for file in os.listdir(folder):
 			dirfile = os.path.join(folder, file)
 			if os.path.isfile(dirfile):
 				evalutateFile(dirfile, context, parseConfig)
 			elif os.path.isdir(dirfile):
 				self.parseFolder(dirfile, context, parseConfig)
+		
+
 
 	def run(self):
+		global onParseDoneCallback
 		self.parseFolder(self.parseConfig.folder, self.context, self.parseConfig)
+		onParseDoneCallback()
 
 	def stop(self):
 		if self.isAlive():

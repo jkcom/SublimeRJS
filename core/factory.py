@@ -1,3 +1,6 @@
+import sys
+sys.path.append("core")
+
 import os
 import model
 import editor
@@ -28,7 +31,7 @@ def createModule(newContext, newCreateConfig):
 def onPackageSelected(selectionIndex):
 	global createConfig
 	global shadowList
-	moduleSuggestiong = shadowList[selectionIndex] + createConfig["name"]
+	moduleSuggestiong = shadowList[selectionIndex]
 	if createConfig["type"] == "script":
 		print "SCRIPT"
 		for sp in context.settings["script_folders"]:
@@ -43,7 +46,7 @@ def onPackageSelected(selectionIndex):
 				createConfig["packageBase"] = sp
 
 
-	context.window.show_input_panel("Name your new module", moduleSuggestiong, onNameDone, onNameChange, onNamceCancle)
+	context.window.show_input_panel("Name your new module", moduleSuggestiong+createConfig["name"], onNameDone, onNameChange, onNamceCancle)
 
 
 def onNameDone(inputString):
@@ -78,7 +81,9 @@ def onNameDone(inputString):
 	file = open(moduleFile, 'w+')
 	file.write(fileContent)
 	file.close()
-	createConfig["callback"]()
+	
+	temp = (moduleFile).split(context.getBaseDir() + createConfig["packageBase"] + "/")[1];
+	createConfig["callback"](temp[0:temp.rfind(".")], createConfig)
 	# create module
 
 	#package = file.split(parseConfig.folder)[1][1:].split(ntpath.basename(file))[0]
