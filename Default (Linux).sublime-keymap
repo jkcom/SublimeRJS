@@ -1,0 +1,13 @@
+    [{
+    	"keys": ["ctrl+m"],
+    	"command": "sublime_rjs"
+    },{
+    	"keys": ["ctrl+shift+7"],
+    	"command": "sublime_rjs_open1"
+    },{
+    	"keys": ["ctrl+shift+8"],
+    	"command": "sublime_rjs_open2"
+    },{
+        "keys": ["ctrl+shift+9"],
+        "command": "sublime_rjs_open3"
+    }]
