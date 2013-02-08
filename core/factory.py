@@ -4,6 +4,7 @@ sys.path.append("core")
 import os
 import model
 import editor
+import ntpath
 
 global shadowList
 
@@ -52,7 +53,9 @@ def onPackageSelected(selectionIndex):
 def onNameDone(inputString):
 	global createConfig
 	global context
+	global shadowList
 	moduleFile = context.getBaseDir() + createConfig["packageBase"] + "/" + inputString
+	createConfig["moduleFile"] = moduleFile
 	print moduleFile
 
 	name = moduleFile[moduleFile.rfind("/"):]
@@ -68,39 +71,67 @@ def onNameDone(inputString):
 
 	moduleDir = moduleFile[0:moduleFile.rfind("/")]
 	moduleFile = moduleDir + name
+	createConfig["moduleFile"] = moduleFile
 	if os.path.exists(moduleDir) == False:
 		os.makedirs(moduleDir)
 
-	fileContent = "define(function(){});"
-	if len(context.settings["auto_add"]) > 0:
-		for module in context.settings["auto_add"]:
-			addEdit = editor.ModuleEdit(fileContent, context)
-			addEdit.addModule(context.getModuleByImportString(module))
-			fileContent = addEdit.render()+ "{});";
 
-	file = open(moduleFile, 'w+')
+	# ask for snippet
+	if context.settings["module_templates"] is not "":
+		snippetsDir = context.getBaseDir() + context.settings["module_templates"]
+		snippets = []
+		shadowList =[]
+		snippets.append("Blank")
+		shadowList.append("")
+		for file in os.listdir(snippetsDir):
+			dirfile = os.path.join(snippetsDir, file)
+			if os.path.isfile(dirfile):
+				snippets.append(ntpath.basename(file))
+				shadowList.append(dirfile)
+
+		context.window.show_quick_panel(snippets, onSnippetSelected, 0)
+	else:
+		finish("")
+
+def onSnippetSelected(selectionIndex):
+	global shadowList
+	if selectionIndex == 0:
+		finish("")
+	else:
+		moduleName = createConfig["moduleFile"][createConfig["moduleFile"].rfind("/") + 1:createConfig["moduleFile"].rfind(".")]
+		f = open(shadowList[selectionIndex], "r")
+		data = f.read()
+		snippet = data
+		snippet = snippet.replace("$MODULE_NAME", moduleName)
+		f.close()
+		finish(snippet)
+
+
+def finish(snippet):
+	global createConfig
+	global context
+	fileContent = ""
+	if createConfig["type"] == "script":
+		fileContent = "define(function(){});"
+		if len(context.settings["auto_add"]) > 0:
+			for module in context.settings["auto_add"]:
+				addEdit = editor.ModuleEdit(fileContent, context)
+				addEdit.addModule(context.getModuleByImportString(module))
+				fileContent = addEdit.render()+ "{\n"+snippet+"\n});";	
+
+	file = open(createConfig["moduleFile"], 'w+')
 	file.write(fileContent)
 	file.close()
-	
-	temp = (moduleFile).split(context.getBaseDir() + createConfig["packageBase"] + "/")[1];
-	createConfig["callback"](temp[0:temp.rfind(".")], createConfig)
-	# create module
 
-	#package = file.split(parseConfig.folder)[1][1:].split(ntpath.basename(file))[0]
-	#module = model.Module(ntpath.basename(file), ntpath.dirname(file), ext, createConfig["type"], package)
-	# check module for aliases
-	#moduleAliasMap = context.getModuleAliasMap()
-	#if module.getImportString() in moduleAliasMap:
-	#	module.setImportAlias(moduleAliasMap[module.getImportString()])
-	# check for refrence aliases
-	#if module.getImportString() in context.settings["aliases"]:
-	#	module.setRefrenceAlias(context.settings["aliases"][module.getImportString()])
-	# add to context
-	#if module.type == "script":
-	#	context.addScriptModule(module)
-	#elif module.type == "text":
-	#	context.addTextModule(module)
-	pass
+	# callback to let module be imported
+	if createConfig["type"] == "script":
+		temp = (createConfig["moduleFile"]).split(context.getBaseDir() + createConfig["packageBase"] + "/")[1];
+		importString = temp[0:temp.rfind(".")]
+	elif createConfig["type"] == "text":
+		temp = (createConfig["moduleFile"]).split(context.getBaseDir() + createConfig["packageBase"] + "/")[1];
+		importString = "text!" + temp
+	createConfig["callback"](importString, createConfig)
+
 
 def onNameChange(input):
 	pass

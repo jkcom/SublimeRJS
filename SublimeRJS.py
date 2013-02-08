@@ -76,10 +76,21 @@ def checkModulesAddInLine():
 	global moduleAddInLine
 	module = context.getModuleByImportString(moduleAddInLine)
 	if module is not None:
-		addModule(context.getModuleByImportString(moduleAddInLine))
+		addModule(module)
+		openModuleFile(module)
 		moduleAddInLine = None
 	pass
 
+
+def openModuleFile(module):
+	print "open module", module
+	if module.type == "script":
+		focus = int(context.settings["script_group"])
+		sublime.active_window().focus_group(focus)
+	elif module.type == "text":
+		focus = int(context.settings["text_group"])
+		sublime.active_window().focus_group(focus)
+	sublime.active_window().open_file(module.getFullPath())
 
 
 # application listner
@@ -180,6 +191,7 @@ def createModule(importOnCreated, type):
 def onModuleCreated(importString, createConfig):
 	global moduleAddInLine
 	module_parser.parseModules(context, onModulePareDone)
+	print "module crated", importString
 	if createConfig["importOnCreated"] == True:
 		moduleAddInLine = importString
 		pass

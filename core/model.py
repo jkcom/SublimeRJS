@@ -8,6 +8,7 @@ class Context:
 	scriptModules = None
 	textModules = None
 	modulesByImportString = {}
+	scriptPackages = []
 
 	def __init__(self, window, settingsPath):
 		self.window = window

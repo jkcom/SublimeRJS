@@ -4,6 +4,7 @@
 	"require_main":"",
 	"aliases": {},
 	"autoadd":[],
-	"scriptGroup":"1",
-	"textGroup":"2"
+	"script_group":"1",
+	"textGroup":"2",
+	"module_templates":""
 }
