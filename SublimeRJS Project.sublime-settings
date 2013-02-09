@@ -1,10 +1,10 @@
 {
-	"script_folders": [],
-	"text_folders":[],
+	"script_folder": "",
+	"text_folder":"",
 	"require_main":"",
 	"aliases": {},
-	"autoadd":[],
-	"script_group":"1",
-	"textGroup":"2",
+	"auto_add":[],
+	"script_group":"0",
+	"text_group":"1",
 	"module_templates":""
 }

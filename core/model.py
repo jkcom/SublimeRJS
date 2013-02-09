@@ -10,6 +10,7 @@ class Context:
 	modulesByImportString = {}
 	scriptPackages = []
 
+
 	def __init__(self, window, settingsPath):
 		self.window = window
 		self.settingsPath = settingsPath
@@ -36,7 +37,9 @@ class Context:
 		self.scriptModules = []
 		self.textModules = []
 		self.scriptPackages = []
+		self.scriptPackages.append("")
 		self.textPackages = []
+		self.textPackages.append("")
 
 	def addScriptModule(self, module):
 		self.scriptModules.append(module)
@@ -103,7 +106,7 @@ class Module:
 		if self.type == "script":
 			return self.package + self.name.split(self.ext)[0]
 		elif self.type == "text":
-			return "text!" + self.package + self.name
+			return "text!texts/" + self.package + self.name
 
 	def getRefrenceString(self):
 		if self.importAlias is not "":

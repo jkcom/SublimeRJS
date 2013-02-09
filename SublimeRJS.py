@@ -29,6 +29,9 @@ shadowList = None
 global moduleAddInLine
 moduleAddInLine = None
 
+global moduelOpenInLine
+moduleOpenInLine = None
+
 global currentModuleEdit
 
 # update contexts
@@ -74,11 +77,14 @@ def onModulePareDone():
 
 def checkModulesAddInLine():
 	global moduleAddInLine
+	global moduleOpenInLine
 	module = context.getModuleByImportString(moduleAddInLine)
 	if module is not None:
 		addModule(module)
-		openModuleFile(module)
 		moduleAddInLine = None
+	if moduleOpenInLine is not None:
+		openModuleFile(context.getModuleByImportString(moduleOpenInLine))
+		moduleOpenInLine = None
 	pass
 
 
@@ -190,40 +196,55 @@ def createModule(importOnCreated, type):
 
 def onModuleCreated(importString, createConfig):
 	global moduleAddInLine
-	module_parser.parseModules(context, onModulePareDone)
-	print "module crated", importString
+	global moduleOpenInLine
 	if createConfig["importOnCreated"] == True:
 		moduleAddInLine = importString
-		pass
+	moduleOpenInLine = importString
+	module_parser.parseModules(context, onModulePareDone)
 
 
 # main callback
 def onMainActionSelected(selectionIndex):
 	global context
-	if (selectionIndex == 0):
-		selectModule(onScriptSelectAdd, context.getScriptModules())
-	elif (selectionIndex == 1):
-		selectModule(onTextSelectAdd, context.getTextModules())
-	elif selectionIndex == 2:
-		removeModule()
-	elif selectionIndex == 3:
-		createModule(False, "script")
-	elif selectionIndex == 4:
-		createModule(False, "text")
-	elif selectionIndex == 5:
-		createModule(True, "script")
-	elif selectionIndex == 6:
-		createModule(True, "text")
+	if selectionIndex == -1:
+		return
+	if len(context.settings["text_folder"]) > 0:
+		if (selectionIndex == 0):
+			selectModule(onScriptSelectAdd, context.getScriptModules())
+		elif (selectionIndex == 1):
+			selectModule(onTextSelectAdd, context.getTextModules())
+		elif selectionIndex == 2:
+			removeModule()
+		elif selectionIndex == 3:
+			createModule(False, "script")
+		elif selectionIndex == 4:
+			createModule(False, "text")
+		elif selectionIndex == 5:
+			createModule(True, "script")
+		elif selectionIndex == 6:
+			createModule(True, "text")
+	else:
+		if (selectionIndex == 0):
+			selectModule(onScriptSelectAdd, context.getScriptModules())
+		elif selectionIndex == 1:
+			removeModule()
+		elif selectionIndex == 2:
+			createModule(False, "script")
+		elif selectionIndex == 3:
+			createModule(True, "script")
 
 
 def onScriptSelectOpen(selectionIndex):
+	if selectionIndex == -1:
+		return
 	global shadowList
-	print shadowList[selectionIndex].path
 	sublime.active_window().open_file(shadowList[selectionIndex].getFullPath())
 	pass
 
 
 def onTextSelectOpen(selectionIndex):
+	if selectionIndex == -1:
+		return
 	global shadowList
 	sublime.active_window().open_file(shadowList[selectionIndex].getFullPath())
 	pass
@@ -266,7 +287,11 @@ class SublimeRjsCommand(sublime_plugin.WindowCommand):
     		createAndImportScript += " '" +context.window.active_view().substr(region)+"'"
     		createAndImportText += " '" +context.window.active_view().substr(region)+"'"
 
-    	self.window.show_quick_panel(["Import SCRIPT module", "Import TEXT module", "Remove module", "Create SCRIPT module", "Create TEXT module", createAndImportScript, createAndImportText], onMainActionSelected, 0)
+    	if len(context.settings["text_folder"]) > 0:
+    		options = ["Import SCRIPT module", "Import TEXT module", "Remove module", "Create SCRIPT module", "Create TEXT module", createAndImportScript, createAndImportText]
+    	else:
+    		options = ["Import SCRIPT module", "Remove module", "Create SCRIPT module", createAndImportScript]
+    	self.window.show_quick_panel(options, onMainActionSelected, 0)
 
 
 class AddSublimeRjsCommand(sublime_plugin.ApplicationCommand):

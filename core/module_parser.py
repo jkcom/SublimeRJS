@@ -13,19 +13,17 @@ def parseModules(context, callback):
 	# clean context
 	context.resetModules()
 	# scripts
-	for folder in context.settings["script_folders"]:
-		parseConfig = parsing.ParseConfig()
-		parseConfig.folder = context.getBaseDir() + folder
-		parseConfig.ext = ".js"
-		parseConfig.type = "script"
-		parseForModules(context, parseConfig)
+	parseConfig = parsing.ParseConfig()
+	parseConfig.folder = context.getBaseDir() + context.settings["script_folder"]
+	parseConfig.ext = ".js"
+	parseConfig.type = "script"
+	parseForModules(context, parseConfig)
 	# texts
-	for folder in context.settings["text_folders"]:
-		parseConfig = parsing.ParseConfig()
-		parseConfig.folder = context.getBaseDir() + folder
-		parseConfig.ext = ".html"
-		parseConfig.type = "text"
-		parseForModules(context, parseConfig)
+	parseConfig = parsing.ParseConfig()
+	parseConfig.folder = context.getBaseDir() + context.settings["text_folder"]
+	parseConfig.ext = ".html"
+	parseConfig.type = "text"
+	parseForModules(context, parseConfig)
 
 global _collector_thread
 _collector_thread = None

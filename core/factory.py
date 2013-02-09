@@ -33,18 +33,21 @@ def onPackageSelected(selectionIndex):
 	global createConfig
 	global shadowList
 	moduleSuggestiong = shadowList[selectionIndex]
+	if selectionIndex == -1:
+		return
+	if selectionIndex == 0:
+		moduleSuggestiong = ""
+
+
 	if createConfig["type"] == "script":
-		print "SCRIPT"
-		for sp in context.settings["script_folders"]:
-			packagePath = context.getBaseDir()+ sp + "/" + moduleSuggestiong
-			if os.path.exists(packagePath) == True:
-				createConfig["packageBase"] = sp
+		packagePath = context.getBaseDir()+ context.settings["script_folder"] + "/" + moduleSuggestiong
+		if os.path.exists(packagePath) == True:
+			createConfig["packageBase"] = context.settings["script_folder"]
 	elif createConfig["type"] == "text":
-		print "TEXT"
-		for sp in context.settings["text_folders"]:
-			packagePath = context.getBaseDir()+ sp + "/" + moduleSuggestiong
-			if os.path.exists(packagePath) == True:
-				createConfig["packageBase"] = sp
+		
+		packagePath = context.getBaseDir()+ context.settings["text_folder"] + "/" + moduleSuggestiong
+		if os.path.exists(packagePath) == True:
+			createConfig["packageBase"] = context.settings["text_folder"]
 
 
 	context.window.show_input_panel("Name your new module", moduleSuggestiong+createConfig["name"], onNameDone, onNameChange, onNamceCancle)
@@ -75,9 +78,8 @@ def onNameDone(inputString):
 	if os.path.exists(moduleDir) == False:
 		os.makedirs(moduleDir)
 
-
 	# ask for snippet
-	if context.settings["module_templates"] is not "":
+	if len(context.settings["module_templates"]) > 0:
 		snippetsDir = context.getBaseDir() + context.settings["module_templates"]
 		snippets = []
 		shadowList =[]
@@ -86,8 +88,10 @@ def onNameDone(inputString):
 		for file in os.listdir(snippetsDir):
 			dirfile = os.path.join(snippetsDir, file)
 			if os.path.isfile(dirfile):
-				snippets.append(ntpath.basename(file))
-				shadowList.append(dirfile)
+				print "TEST .=" + str(ntpath.basename(file)[0:1]), str(ntpath.basename(file)[0:1]) is "."
+				if "DS_Store" not in ntpath.basename(file):
+					snippets.append(ntpath.basename(file))
+					shadowList.append(dirfile)
 
 		context.window.show_quick_panel(snippets, onSnippetSelected, 0)
 	else:
@@ -129,7 +133,7 @@ def finish(snippet):
 		importString = temp[0:temp.rfind(".")]
 	elif createConfig["type"] == "text":
 		temp = (createConfig["moduleFile"]).split(context.getBaseDir() + createConfig["packageBase"] + "/")[1];
-		importString = "text!" + temp
+		importString = "text!texts/" + temp
 	createConfig["callback"](importString, createConfig)
 
 
