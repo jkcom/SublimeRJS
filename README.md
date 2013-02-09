@@ -24,13 +24,8 @@ http://www.youtube.com/watch?v=HlNTheck1Hk
 ## Configuration
 ### Example configuration
     {
-      "script_folders": [
-        "js",
-        "libs"
-      ],
-      "text_folders":[
-        "templates"
-      ],
+      "script_folder": "js",
+      "text_folder":"templates",
       "require_main":"js/main.js",
       "aliases": {
         "jquery":"$",
@@ -47,13 +42,8 @@ http://www.youtube.com/watch?v=HlNTheck1Hk
     }
 ### Config elements
 #### Source folders
-    "script_folders": [
-      "js",
-      "test"
-    ],
-    "text_folders":[
-      "templates"
-    ]
+    "script_folder":"js",
+    "text_folder":"templates"
 Defines the folders that should be indexed. Relative to the config file.
 #### RequireJS main     
     "require_main":"js/main.js"
