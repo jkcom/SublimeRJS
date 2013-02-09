@@ -75,6 +75,7 @@ Download, unzip and move to the `Packages` folder of Sublime Text 2.
 * Method code hints across modules
 * Jump to module definition
 * Support for enviroment variables in module templates
+* Multiple script/text folders
 
 ## Disclaimer
 SublimeRJS is currently at an early stage. It is not recommended to use this for production purpose. All use is at own risk.
