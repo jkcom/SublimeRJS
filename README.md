@@ -1,4 +1,4 @@
-# SublimeRJS
+# SublimeRJS (Beta)
 ###An easier way to import, remove and create modules for the RequireJS module loader.
 
 Based on settings in a configuration file the plugin will parse your source folders and index your modules, enabeling it to automize basic parts of your module handeling.
@@ -82,4 +82,4 @@ SublimeRJS is currently at an early stage. It is not recommended to use this for
 
 Should you choose to look at the source code I should probably advise you that this was my first Python project, and the code will look pretty messy to the experienced Python developer.
 
-
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/050cd2f389536aa8a2261ec4b4be44da "githalytics.com")](http://githalytics.com/jkcom/SublimeRJS)
