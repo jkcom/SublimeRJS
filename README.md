@@ -1,4 +1,5 @@
-# SublimeRJS (Beta)
+# SublimeRJS
+Beta
 ###An easier way to import, remove and create modules for the RequireJS module loader.
 
 Based on settings in a configuration file the plugin will parse your source folders and index your modules, enabeling it to automize basic parts of your module handeling.
