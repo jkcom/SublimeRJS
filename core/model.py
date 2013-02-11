@@ -44,7 +44,8 @@ class Context:
 	def addScriptModule(self, module):
 		self.scriptModules.append(module)
 		self.modulesByImportString[module.getImportString()] = module
-		if module.package not in self.scriptPackages:
+		filtred = self.filterModule(module)
+		if module.package not in self.scriptPackages and filtred is not None:
 			self.scriptPackages.append(module.package)
 
 	def getModuleByImportString(self, importString):
@@ -59,7 +60,8 @@ class Context:
 	def addTextModule(self, module):
 		self.textModules.append(module)
 		self.modulesByImportString[module.getImportString()] = module
-		if module.package not in self.textPackages:
+		filtred = self.filterModule(module)
+		if module.package not in self.textPackages and filtred is not None:
 			self.textPackages.append(module.package)
 
 	def getTextModules(self):
@@ -72,10 +74,21 @@ class Context:
 		return self.moduleAliasMap
 
 	def getTextPackages(self):
+
+		collection = []
+
 		return self.textPackages
 
 	def getScriptPackages(self):
 		return self.scriptPackages
+
+	def filterModule(self, module):
+		if len(self.settings["excludes"]) > 0:
+			for exclude in self.settings["excludes"]:
+				if self.getBaseDir() + exclude in module.path + "/" + module.name:
+					return None
+		return module
+
 
 
 def reverseSlashes(input):
