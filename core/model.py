@@ -78,6 +78,9 @@ class Context:
 		return self.scriptPackages
 
 
+def reverseSlashes(input):
+	return input.replace("")
+
 # module
 class Module:
 	name = ""
@@ -89,10 +92,10 @@ class Module:
 
 	def __init__(self, name, path, ext, type, package):
 		self.name = name
-		self.path = path
+		self.path = path.replace("\\", "/")
 		self.ext = ext
 		self.type = type
-		self.package = package
+		self.package = package.replace("\\", "/")
 
 	def name(self):
 		return self.name
