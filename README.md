@@ -39,7 +39,11 @@ http://www.youtube.com/watch?v=HlNTheck1Hk
       ],
       "script_group":"0",
       "text_group":"1"
-      "module_templates":"module_templates"
+      "module_templates":"module_templates",
+      "excludes": [
+        "js/text.js",
+        "js/libs"
+      ]
     }
 ### Config elements
 #### Source folders
@@ -69,6 +73,12 @@ Sets in which column the module type should be opened.
 #### Module snippets
     "module_templates":"module_templates"
 Specify folder for your module templates.
+#### Excludes
+     "excludes": [
+        "js/text.js",
+        "js/libs"
+      ]
+Files and librarys not to include when listing modules
 ## Install
 Download, unzip and move to the `Packages` folder of Sublime Text 2.
 ## Features to come
@@ -79,6 +89,7 @@ Download, unzip and move to the `Packages` folder of Sublime Text 2.
 * Multiple script/text folders
 * Optimizer launcher
 * Exclude modules (not shown in selection)
+* Add support for 'require()'
 
 ## Disclaimer
 SublimeRJS is currently at an early stage. It is not recommended to use this for production purpose. All use is at own risk.

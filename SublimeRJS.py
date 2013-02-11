@@ -89,7 +89,6 @@ def checkModulesAddInLine():
 
 
 def openModuleFile(module):
-	print "open module", module
 	if module.type == "script":
 		focus = int(context.settings["script_group"])
 		sublime.active_window().focus_group(focus)
@@ -128,16 +127,23 @@ def selectModule(onSelectCallback, group):
 	list = []
 
 	for module in group:
-		list.append([module.name, module.package])
-		shadowList.append(module)
+		module = filterModule(module)
+		if module is not None:
+			list.append([module.name, module.package])
+			shadowList.append(module)
 	context.window.show_quick_panel(list, onSelectCallback, 0)
 
+def filterModule(module):
+	if len(context.settings["excludes"]) > 0:
+		for exclude in context.settings["excludes"]:
+			if context.getBaseDir() + exclude in module.path + "/" + module.name:
+				return None
+	return module
 
 def addModule(module):
 	if module is None:
 		return
 	global context
-	print "do add", module
 	addEdit = editor.ModuleEdit(context.window.active_view().substr(sublime.Region(0, context.window.active_view().size())), context)
 	# get define region
 	defineRegion = addEdit.getDefineRegion()

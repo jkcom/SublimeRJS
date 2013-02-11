@@ -6,5 +6,6 @@
 	"auto_add":[],
 	"script_group":"0",
 	"text_group":"1",
-	"module_templates":""
+	"module_templates":"",
+	"excludes": []
 }
