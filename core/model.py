@@ -103,12 +103,13 @@ class Module:
 	importAlias = ""
 	refrenceAlias = ""
 
-	def __init__(self, name, path, ext, type, package):
+	def __init__(self, name, path, ext, type, package, context):
 		self.name = name
 		self.path = path.replace("\\", "/")
 		self.ext = ext
 		self.type = type
 		self.package = package.replace("\\", "/")
+		self.context = context
 
 	def name(self):
 		return self.name
@@ -122,7 +123,7 @@ class Module:
 		if self.type == "script":
 			return self.package + self.name.split(self.ext)[0]
 		elif self.type == "text":
-			return "text!texts/" + self.package + self.name
+			return "text!" + self.context.settings["texts_name"] + "/" + self.package + self.name
 
 	def getRefrenceString(self):
 		if self.importAlias is not "":
@@ -142,5 +143,8 @@ class Module:
 		self.refrenceAlias = alias
 
 	def getFullPath(self):
-		return self.path +"/"+ self.name
+		return self.path + "/" + self.name
+
+	def getRelativePath(self):
+		return self.path.split(self.context.getBaseDir())[1] + "/" + self.name
 

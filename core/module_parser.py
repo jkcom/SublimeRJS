@@ -34,7 +34,7 @@ def evalutateFile(file, context, parseConfig):
 	fileName, fileExtension = os.path.splitext(file)
 	if (fileExtension == parseConfig.getExt()):
 		package = file.split(os.path.normpath(parseConfig.folder))[1][1:].split(ntpath.basename(file))[0]
-		module = model.Module(ntpath.basename(file), ntpath.dirname(file), parseConfig.getExt(), parseConfig.getType(), package)
+		module = model.Module(ntpath.basename(file), ntpath.dirname(file), parseConfig.getExt(), parseConfig.getType(), package, context)
 		# check module for aliases
 		moduleAliasMap = context.getModuleAliasMap()
 		if module.getImportString() in moduleAliasMap:

@@ -31,37 +31,38 @@ class ModuleEdit:
 			self.refrences = []
 
 	def getModuleList(self):
-		commentList = "\n	/*\n	*	Module list\n"
-		commentList += "	*\n"
+		commentList = "\n    /*\n    *    Module list\n"
+		commentList += "    *\n"
 
-		commentList += self.renderListGroup(self.modulesCollection["autoModules"])
-		commentList += self.renderListGroup(self.modulesCollection["scriptModules"])
-		commentList += self.renderListGroup(self.modulesCollection["textModules"])
+		commentList += self.renderListGroup(self.modulesCollection["autoModules"], True)
+		commentList += self.renderListGroup(self.modulesCollection["scriptModules"], True)
+		commentList += self.renderListGroup(self.modulesCollection["textModules"], False)
 
-		commentList += "	*/"
+		commentList += "    */"
+
 		return commentList
 
-	def renderListGroup(self, items):
+	def renderListGroup(self, items, addBlankLine):
 		if len(items) == 0:
 			return ""
 		listBody = ""
 		sortedKeys = sorted(items, reverse = False)
-		numTabs = 5
+		numSpaces = 20
 		for x in range(0, len(sortedKeys)):
-			div = math.floor(float(len(sortedKeys[x])) / 4)
-			tabs = numTabs - div
-			listBody += "	*	" + sortedKeys[x]
-			for y in range(0, tabs):
-				listBody += "	"
+			listBody += "    *    " + sortedKeys[x]
+			spaces = numSpaces - len(sortedKeys[x])
+			for y in range(0, spaces):
+				listBody += " "
 			listBody += items[sortedKeys[x]] + "\n"
-		listBody += "	*" + "\n"
+		if addBlankLine == True:
+			listBody += "    *" + "\n"
 		return listBody
 
 	def getDefineRegion(self):
 		startIndex = self.content.find("define(")
 
-		if self.content.find("*	Module list") is not -1:
-			endIndex = self.content.find("	*/", startIndex) + 3
+		if self.content.find("*    Module list") is not -1:
+			endIndex = self.content.find("*/", startIndex) + 2
 		else:
 			endIndex = self.content.find("{", startIndex) + 1
 		return sublime.Region(startIndex, endIndex)
@@ -123,8 +124,8 @@ class ModuleEdit:
 			module = self.context.getModuleByImportString(importString)
 			if module is not None:
 				if module.getImportString() in self.context.settings["auto_add"]:
-					self.modulesCollection["autoModules"][module.getRefrenceString()] = module.getImportString()
+					self.modulesCollection["autoModules"][module.getRefrenceString()] = module.getRelativePath()
 				elif module.type == "script":
-					self.modulesCollection["scriptModules"][module.getRefrenceString()] = module.getImportString()
+					self.modulesCollection["scriptModules"][module.getRefrenceString()] = module.getRelativePath()
 				elif module.type == "text":
-					self.modulesCollection["textModules"][module.getRefrenceString()] = module.getImportString()
+					self.modulesCollection["textModules"][module.getRefrenceString()] = module.getRelativePath()

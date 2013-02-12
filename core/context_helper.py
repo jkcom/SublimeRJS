@@ -33,7 +33,7 @@ def loadRequireMain(context):
 			for alias in pathElements:
 				value = alias.split(":")[0]
 				key = alias.split(":")[1].replace("'", "").replace('"', "")
-				if value != "texts" or len(context.settings["text_folder"]) == 0:
+				if value != context.settings["texts_name"] or len(context.settings["text_folder"]) == 0:
 					aliasMap[key] = value
 
 		else:
@@ -48,7 +48,7 @@ def loadRequireMain(context):
 			for x in range(0, stepsToBaseDir):
 				textsPath += "../" + context.settings["text_folder"]
 
-			aliasMap[textsPath] = "texts"
+			aliasMap[textsPath] = context.settings["texts_name"]
 
 			# remove current paths:
 			if configString.find("paths") is not -1:

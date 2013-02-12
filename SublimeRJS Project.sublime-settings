@@ -7,5 +7,6 @@
 	"script_group":"0",
 	"text_group":"1",
 	"module_templates":"",
-	"excludes": []
+	"excludes": [],
+	"texts_name":"texts"
 }

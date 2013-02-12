@@ -133,7 +133,7 @@ def finish(snippet):
 		importString = temp[0:temp.rfind(".")]
 	elif createConfig["type"] == "text":
 		temp = (createConfig["moduleFile"]).split(context.getBaseDir() + createConfig["packageBase"] + "/")[1];
-		importString = "text!texts/" + temp
+		importString = "text!" + self.context.settings["texts_name"] + "/" + temp
 	createConfig["callback"](importString, createConfig)
 
 
