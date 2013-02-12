@@ -1,4 +1,5 @@
 import sublime
+import math
 
 class ModuleEdit:
 
@@ -29,15 +30,47 @@ class ModuleEdit:
 		if (self.refrences[0] == ""):
 			self.refrences = []
 
+	def getModuleList(self):
+		commentList = "\n	/*\n	*	Module list\n"
+		commentList += "	*\n"
+
+		commentList += self.renderListGroup(self.modulesCollection["autoModules"])
+		commentList += self.renderListGroup(self.modulesCollection["scriptModules"])
+		commentList += self.renderListGroup(self.modulesCollection["textModules"])
+
+		commentList += "	*/"
+		return commentList
+
+	def renderListGroup(self, items):
+		if len(items) == 0:
+			return ""
+		listBody = ""
+		sortedKeys = sorted(items, reverse = False)
+		numTabs = 5
+		for x in range(0, len(sortedKeys)):
+			div = math.floor(float(len(sortedKeys[x])) / 4)
+			tabs = numTabs - div
+			listBody += "	*	" + sortedKeys[x]
+			for y in range(0, tabs):
+				listBody += "	"
+			listBody += items[sortedKeys[x]] + "\n"
+		listBody += "	*" + "\n"
+		return listBody
 
 	def getDefineRegion(self):
 		startIndex = self.content.find("define(")
-		endIndex = self.content.find("{", startIndex)
+
+		if self.content.find("*	Module list") is not -1:
+			endIndex = self.content.find("	*/", startIndex) + 3
+		else:
+			endIndex = self.content.find("{", startIndex) + 1
 		return sublime.Region(startIndex, endIndex)
 
 	def addModule(self, module):
 		self.modules.append(module.getImportString())
 		self.refrences.append(module.getRefrenceString())
+
+		self.updateModuleList()
 
 	def render(self):
 		output = "define("
@@ -62,7 +95,7 @@ class ModuleEdit:
 			else:
 				isFirst = False
 			output += refrence
-		output += ") "
+		output += ") {" + "\n" + self.getModuleList()
 		return output
 
 	def getModules(self):
@@ -76,3 +109,22 @@ class ModuleEdit:
 	def removeModule(self, module):
 		self.modules.pop(self.modules.index(module.getImportString()))
 		self.refrences.pop(self.refrences.index(module.getRefrenceString()))
+
+		self.updateModuleList()
+
+	def updateModuleList(self):
+		# run throug for module list
+		self.modulesCollection = {
+			"autoModules": {},
+			"scriptModules": {},
+			"textModules": {}
+		}
+		for importString in self.modules:
+			module = self.context.getModuleByImportString(importString)
+			if module is not None:
+				if module.getImportString() in self.context.settings["auto_add"]:
+					self.modulesCollection["autoModules"][module.getRefrenceString()] = module.getImportString()
+				elif module.type == "script":
+					self.modulesCollection["scriptModules"][module.getRefrenceString()] = module.getImportString()
+				elif module.type == "text":
+					self.modulesCollection["textModules"][module.getRefrenceString()] = module.getImportString()
