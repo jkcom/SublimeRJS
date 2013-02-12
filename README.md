@@ -2,7 +2,7 @@
 Beta
 ###An easier way to import, remove and create modules for the RequireJS module loader.
 
-Based on settings in a configuration file the plugin will parse your source folders and index your modules, enabeling it to automize basic parts of your module handeling.
+Based on settings in a configuration file the plugin will parse your source folders and index your modules, enabling it to automate basic parts of your module handling.
 
 Importing modules is done through a quick search among the indexed modules. When selected for import the modules path as well as reference variable is automatically added to the ‘define’ statement.
 
@@ -15,7 +15,7 @@ http://www.youtube.com/watch?v=HlNTheck1Hk
 ## Usage
 * <b>Add to project</b>  
   Right click your project folder and click `Add SublimeRJS`. This will add the configuration file to your project.  
-  Edit the configuration acording to your project. Save.
+  Edit the configuration according to your project. Save.
 * <b>Menu</b>  
   Press `cmd + m` / `ctrl + m` to open the main menu. This will give you all the options in the quick panel. 
 * <b>Open module</b>  
@@ -43,7 +43,8 @@ http://www.youtube.com/watch?v=HlNTheck1Hk
       "excludes": [
         "js/text.js",
         "js/libs"
-      ]
+      ],
+      "texts_name":"texts"
     }
 ### Config elements
 #### Source folders
@@ -52,7 +53,7 @@ http://www.youtube.com/watch?v=HlNTheck1Hk
 Defines the folders that should be indexed. Relative to the config file.
 #### RequireJS main     
     "require_main":"js/main.js"
-Refrence to the RequireJS main file. Relative to the config file.
+Reference to the RequireJS main file. Relative to the config file.
 #### Aliases
     "aliases": {
       "jquery":"$",
@@ -78,17 +79,20 @@ Specify folder for your module templates.
         "js/text.js",
         "js/libs"
       ]
-Files and librarys not to include when listing modules
+Files and library’s not to include when listing modules
+#### Texts name
+      "texts_name":"texts"
+Allows you to set the name of the text-module path-shorthand. For example text!texts/dir/file.html where 'templates' is defined by texts_name. Primarily used when adding SublimeRJS to existing projects.
+
 ## Install
 Download, unzip and move to the `Packages` folder of Sublime Text 2.
 ## Features to come
 * Move / Refactor modules
 * Method code hints across modules
 * Jump to module definition
-* Support for enviroment variables in module templates
+* Support for environment variables in module templates
 * Multiple script/text folders
 * Optimizer launcher
-* Exclude modules (not shown in selection)
 * Add support for 'require()'
 
 ## Disclaimer
