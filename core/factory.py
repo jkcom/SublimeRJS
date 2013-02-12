@@ -121,7 +121,7 @@ def finish(snippet):
 			for module in context.settings["auto_add"]:
 				addEdit = editor.ModuleEdit(fileContent, context)
 				addEdit.addModule(context.getModuleByImportString(module))
-				fileContent = addEdit.render()+ "{\n"+snippet+"\n});";	
+				fileContent = addEdit.render()+ "\n"+snippet+"\n});";	
 
 	file = open(createConfig["moduleFile"], 'w+')
 	file.write(fileContent)
@@ -133,7 +133,7 @@ def finish(snippet):
 		importString = temp[0:temp.rfind(".")]
 	elif createConfig["type"] == "text":
 		temp = (createConfig["moduleFile"]).split(context.getBaseDir() + createConfig["packageBase"] + "/")[1];
-		importString = "text!" + self.context.settings["texts_name"] + "/" + temp
+		importString = "text!" + context.settings["texts_name"] + "/" + temp
 	createConfig["callback"](importString, createConfig)
 
 
