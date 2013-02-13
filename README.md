@@ -11,7 +11,7 @@ Creating new modules is made easier by quick search of packages(folders), adding
 SublimeRJS supports script as well as text modules.
 ## Demonstration
 Please see the following screencast for a quick feature demonstration.
-http://www.youtube.com/watch?v=HlNTheck1Hk
+http://youtu.be/6_CDony1jjQ
 ## Usage
 * <b>Add to project</b>  
   Right click your project folder and click `Add SublimeRJS`. This will add the configuration file to your project.  
