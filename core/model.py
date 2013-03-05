@@ -22,7 +22,7 @@ class Context:
 		return self.settingsPath
 
 	def getBaseDir(self):
-		return ntpath.dirname(self.settingsPath) + "/"
+		return ntpath.dirname(self.settingsPath).replace("\\", "/") + "/"
 
 	def setSettings(self, settings):
 		self.settings = settings
