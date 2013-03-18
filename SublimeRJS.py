@@ -5,6 +5,7 @@ import model
 
 import sublime
 import sublime_plugin
+import move_module
 
 
 import file_search
@@ -111,13 +112,21 @@ class AppListener(sublime_plugin.EventListener):
 	def on_activated(self, view):
 		if context is not None:
 			if sublime.active_window() is not None:
- 				if sublime.active_window().id() != context.window.id():
+				if sublime.active_window().id() != context.window.id():
 					getContext(sublime.active_window())
 			else:
 				getContext(sublime.active_window())
 		else:
 			getContext(sublime.active_window())
+			
 
+def updateContext():
+	getContext(sublime.active_window())
+	pass
+
+def moveModule():
+	global context
+	move_module.moveModuleInView(context, updateContext)
 
 # select module
 def selectModule(onSelectCallback, group):
@@ -229,6 +238,8 @@ def onMainActionSelected(selectionIndex):
 			createModule(True, "script")
 		elif selectionIndex == 6:
 			createModule(True, "text")
+		elif selectionIndex == 7:
+			moveModule()
 	else:
 		if (selectionIndex == 0):
 			selectModule(onScriptSelectAdd, context.getScriptModules())
@@ -238,6 +249,8 @@ def onMainActionSelected(selectionIndex):
 			createModule(False, "script")
 		elif selectionIndex == 3:
 			createModule(True, "script")
+		elif selectionIndex == 4:
+			moveModule()
 
 
 def onScriptSelectOpen(selectionIndex):
@@ -294,9 +307,9 @@ class SublimeRjsCommand(sublime_plugin.WindowCommand):
     		createAndImportText += " '" +context.window.active_view().substr(region)+"'"
 
     	if len(context.settings["text_folder"]) > 0:
-    		options = ["Import SCRIPT module", "Import TEXT module", "Remove module", "Create SCRIPT module", "Create TEXT module", createAndImportScript, createAndImportText]
+    		options = ["Import SCRIPT module", "Import TEXT module", "Remove module", "Create SCRIPT module", "Create TEXT module", createAndImportScript, createAndImportText, "Move/Rename module"]
     	else:
-    		options = ["Import SCRIPT module", "Remove module", "Create SCRIPT module", createAndImportScript]
+    		options = ["Import SCRIPT module", "Remove module", "Create SCRIPT module", createAndImportScript, "Move/Rename module"]
     	self.window.show_quick_panel(options, onMainActionSelected, 0)
 
 

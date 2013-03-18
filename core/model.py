@@ -8,6 +8,7 @@ class Context:
 	scriptModules = None
 	textModules = None
 	modulesByImportString = {}
+	modulesByFullPath = {}
 	scriptPackages = []
 
 
@@ -40,10 +41,12 @@ class Context:
 		self.scriptPackages.append("")
 		self.textPackages = []
 		self.textPackages.append("")
+		self.modulesByFullPath={}
 
 	def addScriptModule(self, module):
 		self.scriptModules.append(module)
 		self.modulesByImportString[module.getImportString()] = module
+		self.modulesByFullPath[module.getFullPath()] = module
 		filtred = self.filterModule(module)
 		if module.package not in self.scriptPackages and filtred is not None:
 			self.scriptPackages.append(module.package)
@@ -54,12 +57,19 @@ class Context:
 		else:
 			return None
 
+	def getModuleByFullPath(self, fullPath):
+		if fullPath in self.modulesByFullPath:
+			return self.modulesByFullPath[fullPath]
+		else:
+			return None
+
 	def getScriptModules(self):
 		return self.scriptModules
 
 	def addTextModule(self, module):
 		self.textModules.append(module)
 		self.modulesByImportString[module.getImportString()] = module
+		self.modulesByFullPath[module.getFullPath()] = module
 		filtred = self.filterModule(module)
 		if module.package not in self.textPackages and filtred is not None:
 			self.textPackages.append(module.package)
