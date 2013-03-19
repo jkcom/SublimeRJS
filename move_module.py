@@ -5,6 +5,7 @@ from threading import Thread
 
 import os
 import os.path
+import re
 
 global context
 global moveConfig
@@ -23,7 +24,6 @@ def moveModuleInView(activeContext, onModuleMovedCallBack):
 	global moduleToMove
 	
 #	get module to move
-	print "move", context.window.active_view().file_name()
 	moduleToMove = context.getModuleByFullPath(context.window.active_view().file_name())
 	if moduleToMove is None:
 		return
@@ -36,7 +36,7 @@ def moveModuleInView(activeContext, onModuleMovedCallBack):
 		"type": moduleToMove.type,
 		"fullPath": moduleToMove.getFullPath(),
 		"name": moduleToMove.name[0:moduleToMove.name.find(".")],
-		"importString":moduleToMove.getImportString()
+		"importString":moduleToMove.package + moduleToMove.name.split(moduleToMove.ext)[0]
 	}
 	
 	
@@ -75,9 +75,11 @@ def onNameDone(inputString):
 
 	global moveConfig
 	global onModuleMoved
-
+	global context
 
 	moveConfig["newImportString"] = inputString
+	moveConfig["newName"] = inputString[inputString.rfind("/")+1:]
+	
 	moveModule()
 	onModuleMoved()
 
@@ -89,8 +91,17 @@ def onNameDone(inputString):
 def moveModule():
 	global moduleToMove
 	global context
+	global moveConfig
 	context.window.run_command("close_file")
-	newFullPath  = moduleToMove.getFullPath().replace(moveConfig["importString"], moveConfig["newImportString"])
+
+	if moduleToMove.type is "text":
+		current = context.settings["text_folder"] + "/" +moveConfig["importString"]
+		new = context.settings["text_folder"] + "/" +moveConfig["newImportString"]
+	else:
+		current = context.settings["script_folder"] + "/" +moveConfig["importString"]
+		new = context.settings["script_folder"] + "/" +moveConfig["newImportString"]
+
+	newFullPath  = moduleToMove.getFullPath().replace(current, new)
 
 
 	dir = os.path.dirname(newFullPath)
@@ -115,10 +126,17 @@ def updateModules():
 	global context
 	global moduleToMove
 	global t
+
+
+	if moduleToMove.type is "text":
+		#moveConfig["importString"] = "text!" + context.settings["texts_name"] + "/" + moveConfig["importString"] + ".html"
+		#moveConfig["newImportString"] = "text!" + context.settings["texts_name"] + "/" + moveConfig["newImportString"] + ".html"
+		pass
 	
 	# update module refs
 	modulesList = context.getScriptModules()
-	modulesList.remove(moduleToMove)
+	if moduleToMove in modulesList:
+		modulesList.remove(moduleToMove)
 	count = 0
 	t = Thread(target=update, args=(modulesList, moveConfig, updateDone))
 	t.start()
@@ -126,8 +144,6 @@ def updateModules():
 
 
 def updateDone():
-	print "update done"
-	
 	pass
     
 
@@ -145,13 +161,14 @@ def update(modules, moveConfig, callback):
 	pass
 
 def updateModule(module, data, moveConfig):
-	print "update module", module.name
-	print "change package at : ", moveConfig["importString"]
-	print "change package at : ", moveConfig["newImportString"]
-
+	
 	#update import string
-	data = data.replace(moveConfig["importString"], moveConfig["newImportString"], 1)
+	data = data.replace("'"+moveConfig["importString"]+"'", "'"+moveConfig["newImportString"]+"'", 1)
+	#data = re.sub('\\b'+moveConfig["importString"]+'\\b', moveConfig["importString"], data)
 
+	#update variable name
+	if moveConfig["name"] is not moveConfig["newName"]:
+		data = re.sub('\\b'+moveConfig["name"]+'\\b', moveConfig["newName"], data)
 
 	f = open(module.getFullPath(), "w+")
 	f.write(data)
