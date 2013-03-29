@@ -44,7 +44,8 @@ http://youtu.be/6_CDony1jjQ
         "js/text.js",
         "js/libs"
       ],
-      "texts_name":"texts"
+      "texts_name":"texts",
+      "list_modules":"true"
     }
 ### Config elements
 #### Source folders
