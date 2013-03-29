@@ -96,7 +96,12 @@ class ModuleEdit:
 			else:
 				isFirst = False
 			output += refrence
-		output += ") {" + "\n" + self.getModuleList()
+		output += ") {"
+		print "settings is ", self.context.settings["list_modules"], self.context.settings["list_modules"] == "true"
+		if str(self.context.settings["list_modules"]) == "true":
+			print "add list"
+			output += "\n" + self.getModuleList()
+		
 		return output
 
 	def getModules(self):

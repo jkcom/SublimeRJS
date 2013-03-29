@@ -83,6 +83,9 @@ Files and library’s not to include when listing modules
 #### Texts name
       "texts_name":"texts"
 Allows you to set the name of the text-module path-shorthand. For example text!texts/dir/file.html where 'templates' is defined by texts_name. Primarily used when adding SublimeRJS to existing projects.
+#### Toggle modules list comment block
+      "list_modules":"true"
+Setting this to true will add a comment block under your define statement listing all dependencies for the module and the related file.
 
 ## Install
 Download, unzip and move to the `Packages` folder of Sublime Text 2.

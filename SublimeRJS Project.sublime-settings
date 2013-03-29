@@ -8,5 +8,6 @@
 	"text_group":"1",
 	"module_templates":"",
 	"excludes": [],
-	"texts_name":"texts"
+	"texts_name":"texts",
+	"list_modules":"true"
 }
