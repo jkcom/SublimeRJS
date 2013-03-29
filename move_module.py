@@ -15,6 +15,8 @@ global moduleToMove
 global t 
 global onModuleMoved
 
+# test commit
+
 def moveModuleInView(activeContext, onModuleMovedCallBack):
 	global onModuleMoved
 	onModuleMoved = onModuleMovedCallBack
