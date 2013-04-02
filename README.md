@@ -91,7 +91,6 @@ Setting this to true will add a comment block under your define statement listin
 ## Install
 Download, unzip and move to the `Packages` folder of Sublime Text 2.
 ## Features to come
-* Move / Refactor modules
 * Method code hints across modules
 * Jump to module definition
 * Support for environment variables in module templates
