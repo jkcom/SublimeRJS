@@ -120,9 +120,8 @@ def finish(snippet):
 		if len(context.settings["auto_add"]) > 0:
 			for module in context.settings["auto_add"]:
 				addEdit = editor.ModuleEdit(fileContent, context)
-				addEdit.addModule(context.getModuleByImportString(module))
-				fileContent = addEdit.render()+ "\n"+snippet+"\n});";	
-
+				addEdit.addModule(context.getModuleByImportString(module), module)
+				fileContent = addEdit.render()+ "\n"+snippet+"\n});"
 	file = open(createConfig["moduleFile"], 'w+')
 	file.write(fileContent)
 	file.close()

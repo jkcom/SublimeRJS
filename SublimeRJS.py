@@ -156,7 +156,7 @@ def addModule(module):
 	addEdit = editor.ModuleEdit(context.window.active_view().substr(sublime.Region(0, context.window.active_view().size())), context)
 	# get define region
 	defineRegion = addEdit.getDefineRegion()
-	addEdit.addModule(module)
+	addEdit.addModule(module, "")
 	edit = context.window.active_view().begin_edit()
 	context.window.active_view().replace(edit, defineRegion, addEdit.render())
 	context.window.active_view().end_edit(edit)

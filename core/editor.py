@@ -67,9 +67,13 @@ class ModuleEdit:
 			endIndex = self.content.find("{", startIndex) + 1
 		return sublime.Region(startIndex, endIndex)
 
-	def addModule(self, module):
-		self.modules.append(module.getImportString())
-		self.refrences.append(module.getRefrenceString())
+	def addModule(self, module, moduleString):
+		if (module is None):
+			self.modules.append(moduleString)
+			self.refrences.append(moduleString)
+		else:
+			self.modules.append(module.getImportString())
+			self.refrences.append(module.getRefrenceString())
 
 		self.updateModuleList()
 
